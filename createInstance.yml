@@ -13,6 +13,6 @@
           Name: Launched by ansible
           Owmer: Anjan
        region: us-east-1
-       aws_access_key: AKIAJC3G2FVTQNYE44PA
-       aws_secret_key: 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
+       aws_access_key: ACCESSKEY
+       aws_secret_key: SECRETKEY
        wait: true
