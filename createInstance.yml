@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+  - name: Provision a set of instances
+    ec2:
+       instance_type: t2.micro
+       image: ami-d15a75c7
+       vpc_subnet_id: subnet-470b577b
+       key_name: anjan-sele
+       instance_tags:
+          Name: Launched by ansible
+          Owmer: Anjan
+       region: us-east-1
+       aws_access_key: AKIAJC3G2FVTQNYE44PA
+       aws_secret_key: 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
+       wait: true
