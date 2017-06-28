@@ -3,9 +3,10 @@ docker swarm join --token <token> <host:port>
 docker node ls
 
 docker service create --replicas 1 --name jenkins_slave --env JENKINS_SERVER=<ip address> dockerinpractice/jenkins_swarm_slave
-docker ps -a
 docker service ls
 docker service ps jenkins_slave
+docker node ps
+docker ps -a
 
 docker service scale jenkins_slave=2
 
