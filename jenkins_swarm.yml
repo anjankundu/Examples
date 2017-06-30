@@ -1,0 +1,20 @@
+iversion: '3'
+services:
+#  jenkins_server:
+#    container_name: jenkins_server
+#    image: dockerinpractice/jenkins
+#    ports:
+#      - 8080:8080
+#      - 50000:50000
+#    volumes:
+#      - /home/ubuntu/jenkins:/var/jenkins_home/jobs
+#    deploy:
+#      placement:
+#        constraints: [node.role == manager]
+
+  jenkins_slave:
+    image: dockerinpractice/jenkins_swarm_slave
+    environment:
+      - JENKINS_SERVER=34.239.230.156
+    deploy:
+      replicas: 3

@@ -16,5 +16,12 @@ docker swarm leave # on worker node
 docker node rm hostname
 docker swarm leave -f # remove swarm manager
 
+docker stack deploy -c jenkins_swarm.yml jen
+docker stack ls
+docker stack ps jen
+docker stack rm jen
+
 
 https://zwischenzugs.wordpress.com/2015/03/19/scale-your-jenkins-compute-with-your-dev-team-use-docker-and-jenkins-swarm/
+https://blog.gruntwork.io/why-we-use-terraform-and-not-chef-puppet-ansible-saltstack-or-cloudformation-7989dad2865c
+http://www.brianlinkletter.com/how-to-run-gui-applications-xfce-on-an-amazon-aws-cloud-server-instance/

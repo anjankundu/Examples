@@ -1,9 +1,8 @@
 version: '3'
 services:
-  jenkins:
+  jenkins_server:
     container_name: jenkins_server
     image: dockerinpractice/jenkins
-#    image: jenkins_master
     ports:
      - 8080:8080
      - 50000:50000
