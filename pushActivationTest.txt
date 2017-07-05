@@ -1,0 +1,58 @@
+*** Settings ***
+
+Library         pushActivationTest.py
+
+
+*** Test Cases ***
+
+Login Redirector VCO As Operator
+   ${sessionRedirector} =    Login As Operator    ${username}    ${password}    ${hostRedirector}
+   Set Global Variable    ${sessionRedirector}
+
+Login Managed VCO As Operator
+   ${sessionManaged} =    Login As Operator    ${username}    ${password}    ${hostManaged}
+   Set Global Variable    ${sessionManaged}
+
+Set System Properties on Redirector VCO
+   Set System Properties    ${sessionRedirector}    ${hostRedirector}    Redirector
+
+Set System Properties on Managed VCO
+   Set System Properties    ${sessionManaged}    ${hostManaged}    Managed
+
+Add Managed VCO Details
+   ${managedUuid} =    Get Managed VCO UUID    ${sessionManaged}    ${hostManaged}
+   ${ownerId} =    Add Managed VCO Owner    ${sessionRedirector}    ${hostRedirector}    ${partnerName}    ${partnerAccountNumber}    ${partnerContactName}    ${partnerContactEmail}
+   ${managedVcoId} =    Add Managed VCO Details    ${sessionRedirector}    ${hostRedirector}    ${managedUuid}    ${hostManaged}    ${ownerId}    ${managedVcoName}
+   Set Global Variable    ${managedVcoId}
+
+Add Redirector VCO Details
+   ${upstreamId} =    Add Redirector VCO Details    ${sessionManaged}    ${hostManaged}    ${hostRedirector}    ${redirectorVcoName}
+
+Get Managing VCO Status
+   Sleep    5 seconds
+   ${status} =    Get Managing VCO Status    ${sessionManaged}    ${hostManaged}
+   Should Be Equal    ${status}    ACTIVE
+
+Get Managed VCO Status
+   ${status} =    Get Managed VCO Status    ${sessionRedirector}    ${hostRedirector}    ${managedVcoId}
+   Should Be Equal    ${status}    ACTIVE
+
+Add Edge Inventory
+   ${inventoryId} =    Add Edge Inventory    ${sessionRedirector}    ${hostRedirector}    ${edgeSerialNumber}    ${edgeUuid}    ${edgeModelNumber}
+   Set Global Variable    ${inventoryId}
+    
+Assign Inventory To Managed VCO
+   Assign Inventory To Managed VCO    ${sessionRedirector}    ${hostRedirector}    ${inventoryId}    ${managedVcoId} 
+   Sleep    5 seconds
+   ${state} =    Get Edge Inventory State    ${sessionRedirector}    ${hostRedirector}    ${inventoryId}
+   Should Be Equal    ${state}    ASSIGNED
+   ${state} =    Get Edge Inventory State    ${sessionManaged}    ${hostManaged}    ${inventoryId}
+   Should Be Equal    ${state}    ASSIGNED
+
+Assign Inventory To Enterprise
+   Assign Inventory To Enterprise    ${sessionManaged}    ${hostManaged}    ${inventoryId}    ${enterpriseId}
+   Sleep    5 seconds
+   ${state} =    Get Edge Inventory State    ${sessionRedirector}    ${hostRedirector}    ${inventoryId}
+   Should Be Equal    ${state}    IN_USE
+   ${state} =    Get Edge Inventory State    ${sessionManaged}    ${hostManaged}    ${inventoryId}
+   Should Be Equal    ${state}    IN_USE
