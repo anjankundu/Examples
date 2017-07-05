@@ -1,0 +1,14 @@
+---
+- hosts: vcohosts
+  tasks:
+  - name: Stop VCO container
+    docker_container:
+       name: vco
+       state: absent
+
+  - name: Start VCO container
+    docker_container:
+       name: vco
+       image: 441597883434.dkr.ecr.us-east-1.amazonaws.com/vc-vco:vco-build-testall.8099
+       state: started
+       ports: "443:443"
